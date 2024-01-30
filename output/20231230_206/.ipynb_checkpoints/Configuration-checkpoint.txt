@@ -1,0 +1,30 @@
+    env = TradingEnv(
+        name= "BTCUSD",
+        df = df_training, # Your dataset with your custom features
+        positions = [0, 1], # -1 (=SHORT), 0(=OUT), +1 (=LONG)
+        portfolio_initial_value=100,
+        initial_position=1,
+        #obs_columns=['open','high','low','close','volume'], diff_close
+        #obs_columns=['feature_close','feature_open','feature_high','feature_low','feature_volume','diff_close'],# Other feature is 'Postion'
+        obs_columns=['feature_close','feature_open','feature_high','feature_low','feature_volume'],
+        #trading_fees = 0.01/100, # 0.01% per stock buy / sell (Binance fees)
+        trading_fees =0,
+        #borrow_interest_rate= 0.0003/100, # 0.0003% per timestep (one timestep = 1h here)
+        borrow_interest_rate= 0,
+        verbose=1
+    )
+
+    
+    best_score = -np.inf
+    load_checkpoint = False
+    record_agent = False
+    n_games = 250
+    
+    agent = Agent(gamma=0.99, epsilon=1, lr=0.001,
+                  #input_dims=env.observation_space.shape,n_actions=env.action_space.n, 
+                  input_dims=env.observation_space,n_actions=len(env.action_space),
+                  mem_size=1000000, eps_min=0.01,
+                  batch_size=32, replace=1000, eps_dec=1e-3, # batch_size=32 ATTENTION
+                  n_neurons1=256,n_neurons2=256,
+                  dir=PATH_EVAL, dir2=PATH_NEXT,
+                  env_name='Trading_bot')
