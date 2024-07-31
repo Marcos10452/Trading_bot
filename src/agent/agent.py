@@ -32,7 +32,7 @@ class Agent:
         self.memory = ReplayBuffer(mem_size, input_dims)
         # this will be the DNN for agent
         self.policy_net = build_dqn(lr,n_actions,input_dims, n_neurons1,n_neurons2,new_model,path_model) #256,256
-        # this will be the DNN which is going to work as ORACLE
+        # this will be the DNN which is going to work as Target function
         self.target_net = build_dqn(lr,n_actions,input_dims, n_neurons1,n_neurons2,new_model,path_model)
 
 

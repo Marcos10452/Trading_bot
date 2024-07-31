@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import gym
 import tensorflow as tf
+import pandas as pd
 
 
 
@@ -76,3 +77,35 @@ def linear_chart_portfolio(x,y,dir):
     ax.legend()
     fig.savefig(dir+"Portfolio.png")
     plt.show()
+
+#____________________ Sharpe Ratio _________________________
+
+def annualised_sharpe(returns, N=252):
+    """
+    Calculate the annualised Sharpe ratio of a returns stream
+    based on a number of trading periods, N. N defaults to 252,
+    which then assumes a stream of daily returns.
+
+    The function assumes that the returns are the excess of
+    those compared to a benchmark.
+    """
+    return np.sqrt(N) * returns.mean() / returns.std()
+    
+def equity_sharpe(df,column_name,free_risk_rate,N):
+    """
+    Calculates the annualised Sharpe ratio based on the daily
+    returns of an equity ticker symbol listed in AlphaVantage.
+    """
+    # Use the percentage change method to easily calculate hour returns
+    df['hour_ret'] = df[column_name].pct_change()
+
+    # Assume an average annual risk-free rate over the period of 5%
+    #eval(ticker)['excess_daily_ret'] = eval(ticker)['daily_ret'] - 0.05/252
+    #Calculate per hour the benchmark rate (US federal reserve)
+    # 5% annul divided 252 trading days by 7 hours of trading per day.=1764
+    df['excess_hour_ret'] = df['hour_ret'] - free_risk_rate
+    
+    # Return the annualised Sharpe ratio based on the excess daily returns
+    return annualised_sharpe(df['excess_hour_ret'],N)
+
+

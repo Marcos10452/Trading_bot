@@ -1,6 +1,6 @@
 
 #--------------------- Settings ------------------------
-NUMBER_GAMES = 240
+NUMBER_GAMES = 300
 GAMMA = 0.99
 
 #----------- Model ----------------------------------
@@ -11,7 +11,7 @@ EPSILON_DECAY = 1e-4
 
 NEURONS_1=128
 NEURONS_2=128
-LEARNING_RATE=0.001
+LEARNING_RATE=0.0005
 OPTIMIZER='Adam' #SGD
 LOSS='mse'       #
 BATCH_SIZE =  16 #32 was original
